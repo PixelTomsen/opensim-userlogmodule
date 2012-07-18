@@ -1,0 +1,37 @@
+:VERSION 1
+
+BEGIN TRANSACTION;
+
+CREATE TABLE IF NOT EXISTS `userlog_agent` (
+  `region_id` varchar(128),
+  `region_name` varchar(128),
+  `avatar_pos` varchar(128),
+  `avatar_id` varchar(128),
+  `avatar_name` varchar(128),
+  `avatar_ip` varchar(128),
+  `country_code` varchar(128),
+  `country_name` varchar(128),
+  `avatar_viewer` varchar(128),
+  `avatar_time` integer,
+   PRIMARY KEY  (`region_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `userlog_region` (
+  `region_id` varchar(128),
+  `region_name` varchar(255),
+   PRIMARY KEY  (`region_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `userlog_country` (
+  `country_code` varchar(4),
+  `country_name` varchar(255),
+   PRIMARY KEY  (`country_code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `userlog_viewer` (
+  `viewer` varchar(255),
+   PRIMARY KEY  (`viewer`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+COMMIT;
+
