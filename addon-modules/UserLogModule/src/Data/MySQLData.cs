@@ -47,6 +47,7 @@ namespace OpenSim.Region.UserLogModule.Data
         private string m_connectionString = String.Empty;
 
         private MySqlConnection m_connection = null;
+        private object m_dbLock = new object();
 
         protected virtual Assembly Assembly
         {
@@ -80,12 +81,71 @@ namespace OpenSim.Region.UserLogModule.Data
 
         public void StoreAgentLoginData(UserLogAgentData AgentData)
         {
-            m_log.WarnFormat("[UserLogModule]: Mysql Data-Storage not supported.");
+            try
+            {
+                UpdateAgentTable(AgentData);
+            }
+            catch (Exception ex)
+            {
+                m_log.ErrorFormat("[UserLogModule]: MySQL Exception: {0} - {1}" + ex.Message, ex.StackTrace);
+            }
+
         }
 
         public void StoreAgentViewerData(UserLogAgentViewerData ViewerData)
         {
             m_log.WarnFormat("[UserLogModule]: Mysql Data-Storage not supported.");
+        }
+
+        private void UpdateAgentTable(UserLogAgentData agentData)
+        {
+            lock (m_dbLock)
+            {
+                using (MySqlConnection dbcon = new MySqlConnection(m_connectionString))
+                {
+                    dbcon.Open();
+
+                    using (MySqlCommand cmd = dbcon.CreateCommand())
+                    {
+                        cmd.CommandText = "REPLACE INTO userlog_agent (region_id, agent_id, agent_name, " +
+                            "agent_pos, agent_ip, agent_country, agent_viewer, agent_time) " +
+                            "VALUES (" +
+                            "?region_id, ?agent_id, ?agent_name, ?agent_pos, ?agent_ip, ?agent_country, " +
+                            "?agent_viewer, ?agent_time)";
+
+                        cmd.Parameters.AddWithValue("region_id", agentData.RegionID.ToString());
+                        cmd.Parameters.AddWithValue("region_name", agentData.RegionName);
+                        cmd.Parameters.AddWithValue("agent_id", agentData.ID.ToString());
+                        cmd.Parameters.AddWithValue("agent_name", agentData.Name);
+                        cmd.Parameters.AddWithValue("agent_pos", agentData.Position);
+                        cmd.Parameters.AddWithValue("agent_ip", agentData.IP);
+                        cmd.Parameters.AddWithValue("agent_country", agentData.CountryCode);
+                        cmd.Parameters.AddWithValue("country_name", agentData.CountryName);
+                        cmd.Parameters.AddWithValue("agent_viewer", agentData.Viewer);
+                        cmd.Parameters.AddWithValue("agent_time", Util.UnixTimeSinceEpoch().ToString());
+                        cmd.ExecuteNonQuery();
+
+                        cmd.CommandText = "REPLACE INTO userlog_country (country_code, country_name) " +
+                            "VALUES (" +
+                            "?agent_country, ?country_name)";
+
+                        cmd.ExecuteNonQuery();
+
+                        cmd.CommandText = "REPLACE INTO userlog_region (region_id, region_name) " +
+                            "VALUES (" +
+                            "?region_id, ?region_name)";
+
+                        cmd.ExecuteNonQuery();
+
+                        cmd.CommandText = "REPLACE INTO userlog_viewer (viewer) " +
+                             "VALUES (" +
+                             "?agent_viewer)";
+
+                        cmd.ExecuteNonQuery();
+                        cmd.Parameters.Clear();
+                    }
+                }
+            }
         }
     }
 }

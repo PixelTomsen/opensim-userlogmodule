@@ -217,7 +217,7 @@ namespace OpenSim.Region.UserLogModule
                 agentData.RegionName = sp.Scene.RegionInfo.RegionName;
                 agentData.Position = string.Format("/{0:F2}/{1:F2}/{2:F2}", sp.AbsolutePosition.X, sp.AbsolutePosition.Y, sp.AbsolutePosition.Z);
                 agentData.ID = ci.agentcircuit.AgentID;
-                agentData.Name = string.Format("{0} {1}",ci.agentcircuit.firstname, ci.agentcircuit.lastname);
+                agentData.Name = string.Format("{0} {1}", ci.agentcircuit.firstname, ci.agentcircuit.lastname);
                 agentData.IP = ip.Address.ToString();
                 agentData.Viewer = sp.Viewer;
                 agentData.CountryCode = m_agentCountry.LookupCountryCode(ip.Address);
@@ -225,7 +225,7 @@ namespace OpenSim.Region.UserLogModule
             }
             catch (Exception ex)
             {
-                m_log.ErrorFormat("[{0}]: Exception on received agentdata - {1} : {2}",Name, ex.Message, ex.StackTrace);
+                m_log.ErrorFormat("[{0}]: Exception on received agentdata - {1} : {2}", Name, ex.Message, ex.StackTrace);
                 Util.PrintCallStack();
                 return;
             }

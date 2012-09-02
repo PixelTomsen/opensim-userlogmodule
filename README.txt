@@ -1,4 +1,4 @@
-;Developer: Pixel Tomsen (chk) (pixel.tomsen [at] gridnet.info)
+;Developer: Pixel Tomsen (Christian Kurzhals / www.ckinfo.de) (pixel.tomsen [at] gridnet.info)
 ;
 ;Function : Agent Log-Module for Different Database-Storages [OpenSim-RegionServer-AddOn]
 ;
