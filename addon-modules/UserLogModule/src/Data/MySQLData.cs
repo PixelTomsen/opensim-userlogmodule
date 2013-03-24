@@ -108,10 +108,10 @@ namespace OpenSim.Region.UserLogModule.Data
                     using (MySqlCommand cmd = dbcon.CreateCommand())
                     {
                         cmd.CommandText = "REPLACE INTO userlog_agent (region_id, agent_id, agent_name, " +
-                            "agent_pos, agent_ip, agent_country, agent_viewer, agent_time) " +
+                            "agent_pos, agent_ip, agent_country, agent_viewer,agent_grid, agent_time) " +
                             "VALUES (" +
                             "?region_id, ?agent_id, ?agent_name, ?agent_pos, ?agent_ip, ?agent_country, " +
-                            "?agent_viewer, ?agent_time)";
+                            "?agent_viewer, ?agent_grid, ?agent_time)";
 
                         cmd.Parameters.AddWithValue("region_id", agentData.RegionID.ToString());
                         cmd.Parameters.AddWithValue("region_name", agentData.RegionName);
@@ -122,6 +122,7 @@ namespace OpenSim.Region.UserLogModule.Data
                         cmd.Parameters.AddWithValue("agent_country", agentData.CountryCode);
                         cmd.Parameters.AddWithValue("country_name", agentData.CountryName);
                         cmd.Parameters.AddWithValue("agent_viewer", agentData.Viewer);
+                        cmd.Parameters.AddWithValue("agent_grid", agentData.Grid);
                         cmd.Parameters.AddWithValue("agent_time", Util.UnixTimeSinceEpoch().ToString());
                         cmd.ExecuteNonQuery();
 

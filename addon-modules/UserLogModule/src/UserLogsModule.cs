@@ -1,5 +1,5 @@
 /*
- * Pixel Tomsen 2012 (pixel.tomsen [at] gridnet.info)
+ * Pixel Tomsen 2013 (pixel.tomsen [at] gridnet.info)
  *
  * Copyright (c) Contributors, http://opensimulator.org/
  * See CONTRIBUTORS.TXT for a full list of copyright holders.
@@ -48,12 +48,9 @@ using Mono.Addins;
 using OpenSim.Region.UserLogModule.Data;
 //using Caps = OpenSim.Framework.Capabilities.Caps;
 
-[assembly: Addin("UserLogModule", "0.1")]
-[assembly: AddinDependency("OpenSim", "0.5")]
-
 namespace OpenSim.Region.UserLogModule
 {
-    [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "UserLogModule")]
+    [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "UserLogsModule")]
     public class UserLogsModule : IUserStatsLogModule, ISharedRegionModule
     {
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
@@ -139,7 +136,7 @@ namespace OpenSim.Region.UserLogModule
 
         public string Name
         {
-            get { return "UserLogModule"; }
+            get { return "UserLogsModule"; }
         }
 
         public void Close()
@@ -220,6 +217,7 @@ namespace OpenSim.Region.UserLogModule
                 agentData.Name = string.Format("{0} {1}", ci.agentcircuit.firstname, ci.agentcircuit.lastname);
                 agentData.IP = ip.Address.ToString();
                 agentData.Viewer = sp.Viewer;
+                agentData.Grid = "Unknown";
                 agentData.CountryCode = m_agentCountry.LookupCountryCode(ip.Address);
                 agentData.CountryName = m_agentCountry.LookupCountryName(ip.Address);
             }

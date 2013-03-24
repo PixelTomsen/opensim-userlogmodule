@@ -1,37 +1,43 @@
 :VERSION 1
 
-BEGIN TRANSACTION;
+BEGIN;
 
 CREATE TABLE IF NOT EXISTS `userlog_agent` (
-  `region_id` varchar(128),
-  `region_name` varchar(128),
-  `avatar_pos` varchar(128),
-  `avatar_id` varchar(128),
-  `avatar_name` varchar(128),
-  `avatar_ip` varchar(128),
-  `country_code` varchar(128),
-  `country_name` varchar(128),
-  `avatar_viewer` varchar(128),
-  `avatar_time` integer,
-   PRIMARY KEY  (`region_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `region_id` varchar(255) NOT NULL,
+  `agent_id` varchar(64) NOT NULL,
+  `agent_name` varchar(128) NOT NULL,
+  `agent_pos` varchar(255) NOT NULL,
+  `agent_ip` varchar(255) NOT NULL,
+  `agent_country` varchar(255) NOT NULL,
+  `agent_viewer` varchar(255) NOT NULL,
+  `agent_time` bigint(20) NOT NULL,
+  PRIMARY KEY (`agent_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 CREATE TABLE IF NOT EXISTS `userlog_region` (
-  `region_id` varchar(128),
-  `region_name` varchar(255),
-   PRIMARY KEY  (`region_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `region_id` varchar(64) NOT NULL,
+  `region_name` varchar(128) NOT NULL,
+  PRIMARY KEY (`region_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 CREATE TABLE IF NOT EXISTS `userlog_country` (
-  `country_code` varchar(4),
-  `country_name` varchar(255),
-   PRIMARY KEY  (`country_code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `country_code` varchar(4) NOT NULL,
+  `country_name` varchar(255) NOT NULL,
+  PRIMARY KEY (`country_code`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 CREATE TABLE IF NOT EXISTS `userlog_viewer` (
-  `viewer` varchar(255),
-   PRIMARY KEY  (`viewer`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `viewer` varchar(255) NOT NULL,
+  PRIMARY KEY (`viewer`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+COMMIT;
+
+:VERSION 2
+
+BEGIN;
+
+ALTER TABLE `userlog_agent` ADD `agent_grid` varchar(255) NULL AFTER `agent_viewer`;
 
 COMMIT;
 

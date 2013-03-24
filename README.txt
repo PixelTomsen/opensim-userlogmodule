@@ -42,13 +42,13 @@ ToDo :
  enabled = true
 
  ;;
- ;; currently only web-storage implemented
+ ;; current only web and mysql storage implemented
  ;;
  DataBase = web
  ConnectionString = "http://localhost/log/agentlog.php"
 
  ;DataBase = mysql
- ;ConnectionString = "Data Source=localhost;Database=opensim;User ID=opensim;Password=***;"
+ ;ConnectionString = "Data Source=localhost;Database=userlog;User ID=opensim;Password=***;"
 
  ;DataBase = sqlite
  ;ConnectionString = "URI=file:UserLogStats.db,version=3,UseUTF16Encoding=True"

@@ -70,6 +70,7 @@ namespace OpenSim.Region.UserLogModule.Data
             ReqHash["agent_country_code"] = AgentData.CountryCode;
             ReqHash["agent_country_name"] = AgentData.CountryName;
             ReqHash["agent_viewer"] = AgentData.Viewer;
+            ReqHash["agent_grid"] = AgentData.Grid;
 
             XMLRPCRequest(ReqHash, "userlog_update");
         }

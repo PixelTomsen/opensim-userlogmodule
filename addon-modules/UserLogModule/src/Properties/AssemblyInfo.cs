@@ -1,6 +1,6 @@
 ﻿/*
- * Pixel Tomsen 2012 (pixel.tomsen [at] gridnet.info)
- *
+ * Pixel Tomsen 2013 (pixel.tomsen [at] gridnet.info)
+ * 
  * Copyright (c) Contributors, http://opensimulator.org/
  * See CONTRIBUTORS.TXT for a full list of copyright holders.
  *
@@ -27,55 +27,23 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Reflection;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+using Mono.Addins;
 
-using OpenMetaverse;
 
-namespace OpenSim.Region.UserLogModule
-{
-    public interface IUserStatsData
-    {
-        void Initialise(string connectionString);
-        void StoreAgentLoginData(UserLogAgentData AgentData);
-        void StoreAgentViewerData(UserLogAgentViewerData ViewerData);
-    }
-
-    /// <summary>
-    /// Region-Login Data
-    /// </summary>
-    ///
-    public class UserLogAgentData
-    {
-        public UUID ID { get; set; }
-        public string Name { get; set; }
-        public string IP { get; set; }
-        public string Viewer { get; set; }
-        public string CountryCode { get; set; }
-        public string CountryName { get; set; }
-        public string Position { get; set; }
-        public string Grid { get; set; }
-        public UUID RegionID { get; set; }
-        public string RegionName { get; set; }
-    }
-
-    /// <summary>
-    /// ViewerStatsCaps Log
-    /// </summary>
-    ///
-    public class UserLogAgentViewerData
-    {
-        public UUID AgentID { get; set; }
-        public string ViewerLanguage { get; set; }
-        public string Cpu { get; set; }
-        public string Gpu { get; set; }
-        public string Os { get; set; }
-        public string Ram { get; set; }
-        public int RegionVisited { get; set; }
-        public uint StartTime { get; set; }
-        public uint RunTime { get; set; }
-    }
-
-}
-
+[assembly: AssemblyTitle("Opensim.Region.UserLogModule")]
+[assembly: AssemblyDescription("")]
+[assembly: AssemblyConfiguration("")]
+[assembly: AssemblyCompany("http://opensimulator.org")]
+[assembly: AssemblyProduct("http://opensimulator.org")]
+[assembly: AssemblyCopyright("2013 Ch.Kurzhals (PiTo)")]
+[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCulture("")]
+[assembly: ComVisible(false)]
+[assembly: Guid("4c9905f6-a40a-4e91-a41e-436e65438958")]
+[assembly: AssemblyVersion("0.7.6.*")]
+[assembly: AssemblyFileVersion("2.0.0.2")]
+[assembly: Addin("UserLogModule", "2.0")]
+[assembly: AddinDependency("OpenSim", "0.5")]
