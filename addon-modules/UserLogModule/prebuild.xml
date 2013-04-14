@@ -22,6 +22,7 @@
   <Reference name="OpenSim.Framework.Servers"/>
   <Reference name="OpenSim.Framework.Servers.HttpServer"/>
   <Reference name="OpenSim.Data" />
+  <Reference name="OpenSim.Data.MSSQL" />
   <Reference name="OpenSim.Region.Framework" />
   <Reference name="OpenSim.Services.Interfaces"/>
   <Reference name="OpenMetaverse" path="../../../bin/"/>

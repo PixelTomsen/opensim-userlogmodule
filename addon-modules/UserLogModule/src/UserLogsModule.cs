@@ -165,6 +165,9 @@ namespace OpenSim.Region.UserLogModule
                 case "mysql":
                     m_dataStore = new MySQLData(conn);
                     break;
+                case "mssql":
+                    m_dataStore = new MSSqlData(conn);
+                    break;
                 case "sqlite":
                     m_dataStore = new SQLiteData(conn);
                     break;

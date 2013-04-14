@@ -1,0 +1,54 @@
+:VERSION 1
+
+BEGIN TRANSACTION
+
+CREATE TABLE [dbo].[userlog_agent](
+	[region_id] [uniqueidentifier] NOT NULL,
+	[agent_id] [uniqueidentifier] NOT NULL,
+	[agent_name] [varchar](255) NOT NULL,
+	[agent_pos] [varchar](255) NOT NULL,
+	[agent_ip] [varchar](128) NOT NULL,
+	[agent_country] [varchar](12) NOT NULL,
+	[agent_viewer] [varchar](255) NOT NULL,
+	[agent_grid] [varchar](255) NOT NULL,
+	[agent_time] [int] NULL,
+
+ PRIMARY KEY CLUSTERED
+(
+	[region_id] ASC
+)WITH (PAD_INDEX  = OFF, IGNORE_DUP_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+
+
+CREATE TABLE [dbo].[userlog_region](
+	[region_id] [uniqueidentifier] NOT NULL,
+	[region_name] [varchar](255) NOT NULL,
+
+ PRIMARY KEY CLUSTERED
+(
+	[region_id] ASC
+)WITH (PAD_INDEX  = OFF, IGNORE_DUP_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+
+CREATE TABLE [dbo].[userlog_country](
+	[country_code] [varchar](12) NOT NULL,
+    [country_name] [varchar](255) NOT NULL,
+
+ PRIMARY KEY CLUSTERED
+(
+	[country_code] ASC
+)WITH (PAD_INDEX  = OFF, IGNORE_DUP_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+
+CREATE TABLE [dbo].[userlog_viewer](
+    [viewer] [varchar](255) NOT NULL,
+
+ PRIMARY KEY CLUSTERED
+(
+	[viewer] ASC
+)WITH (PAD_INDEX  = OFF, IGNORE_DUP_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+
+
+
+COMMIT
