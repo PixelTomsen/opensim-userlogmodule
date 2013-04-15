@@ -44,12 +44,15 @@ ToDo :
  ;;
  ;; current only web and mysql storage implemented
  ;;
+ 
  DataBase = web
  ConnectionString = "http://localhost/log/agentlog.php"
 
  ;DataBase = mysql
  ;ConnectionString = "Data Source=localhost;Database=userlog;User ID=opensim;Password=***;"
 
- ;DataBase = sqlite
- ;ConnectionString = "URI=file:UserLogStats.db,version=3,UseUTF16Encoding=True"
+ ;DataBase = mssql
+ ;ConnectionString = "Server=localhost\SQLEXPRESS;Database=userlog;User Id=opensim; password=***;"
 
+ ;DataBase = sqlite
+ ;ConnectionString = "URI=file:UserLog.db,version=3,UseUTF16Encoding=True"
