@@ -2,29 +2,30 @@
 
 BEGIN TRANSACTION;
 
-CREATE TABLE IF NOT EXISTS `userlog_agents` (
-  `region_id` varchar(128),
-  `agent_pos` varchar(128),
+CREATE TABLE IF NOT EXISTS `userlog_agent` (
   `agent_id` varchar(128) PRIMARY KEY,
+  `region_id` varchar(128),
   `agent_name` varchar(128),
+  `agent_pos` varchar(128),
   `agent_ip` varchar(128),
-  `country_code` varchar(128),
+  `agent_country` varchar(255),
+  `agent_grid` varchar(255),
   `agent_viewer` varchar(128),
-  `avatar_time` integer
+  `agent_time` integer
 );
 
-CREATE TABLE IF NOT EXISTS `userlog_regions` (
-  `region_id` varchar(128),
+CREATE TABLE IF NOT EXISTS `userlog_region` (
+  `region_id` varchar(128) PRIMARY KEY,
   `region_name` varchar(128)
 );
 
 CREATE TABLE IF NOT EXISTS `userlog_viewer` (
-  `viewer` varchar(128)
+  `viewer` varchar(128) PRIMARY KEY
 );
 
-CREATE TABLE IF NOT EXISTS `userlog_countrys` (
-  `country_code` varchar(3),
-  `country_name` varchar(128)
+CREATE TABLE IF NOT EXISTS `userlog_country` (
+  `country_code` varchar(4) PRIMARY KEY,
+  `country_name` varchar(255)
 );
 
 COMMIT;

@@ -42,7 +42,7 @@ ToDo :
  enabled = true
 
  ;;
- ;; current only web and mysql storage implemented
+ ;; current only web, mysql and sqlite storage implemented
  ;;
  
  DataBase = web

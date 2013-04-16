@@ -44,9 +44,7 @@ namespace OpenSim.Region.UserLogModule.Data
     {
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        private static string m_connectionString = String.Empty;
-
-        private static SqliteConnection m_connection = null;
+        private string m_connectionString = String.Empty;
 
         protected virtual Assembly Assembly
         {
@@ -61,18 +59,22 @@ namespace OpenSim.Region.UserLogModule.Data
         public void Initialise(string connectionString)
         {
             m_connectionString = connectionString;
-            m_log.InfoFormat("[UserLogModule]: Sqlite - connecting: {0}", m_connectionString);
+
+            m_log.DebugFormat("[UserLogModule]: Sqlite - connecting: {0}", m_connectionString);
 
             try
             {
                 if (Util.IsWindows())
                     Util.LoadArchSpecificWindowsDll("sqlite3.dll");
 
-                m_connection = new SqliteConnection(m_connectionString);
-                m_connection.Open();
+                using (SqliteConnection connection = new SqliteConnection(m_connectionString))
+                {
+                    connection.Open();
 
-                Migration m = new Migration(m_connection, Assembly, "sqlite");
-                m.Update();
+                    Migration m = new Migration(connection, Assembly, "sqlite");
+                    m.Update();
+                    connection.Close();
+                }
             }
             catch (Exception ex)
             {
@@ -83,7 +85,14 @@ namespace OpenSim.Region.UserLogModule.Data
 
         public void StoreAgentLoginData(UserLogAgentData AgentData)
         {
-            m_log.WarnFormat("[UserLogModule]: Sqlite Data-Storage not supported.");
+            try
+            {
+                UpdateAgentTable(AgentData);
+            }
+            catch (Exception ex)
+            {
+                m_log.ErrorFormat("[UserLogModule]: SQLite Exception: {0}", ex);
+            }
         }
 
         public void StoreAgentViewerData(UserLogAgentViewerData ViewerData)
@@ -91,5 +100,57 @@ namespace OpenSim.Region.UserLogModule.Data
             m_log.WarnFormat("[UserLogModule]: Sqlite Data-Storage not supported.");
         }
 
+
+        private void UpdateAgentTable(UserLogAgentData agentData)
+        {
+            lock (this)
+            {
+                using (SqliteConnection connection = new SqliteConnection(m_connectionString))
+                {
+                    connection.Open();
+
+                    using (SqliteCommand cmd = new SqliteCommand(
+                        "REPLACE INTO userlog_agent (region_id, agent_id, agent_name, " +
+                        "agent_pos, agent_ip, agent_country, agent_viewer,agent_grid, agent_time) " +
+                        "VALUES (" +
+                        ":region_id, :agent_id, :agent_name, :agent_pos, :agent_ip, :agent_country, " +
+                        ":agent_viewer, :agent_grid, :agent_time)", connection))
+                    {
+                        cmd.Parameters.Add(":region_id", agentData.RegionID.ToString());
+                        cmd.Parameters.Add(":region_name", agentData.RegionName);
+                        cmd.Parameters.Add(":agent_id", agentData.ID.ToString());
+                        cmd.Parameters.Add(":agent_name", agentData.Name);
+                        cmd.Parameters.Add(":agent_pos", agentData.Position);
+                        cmd.Parameters.Add(":agent_ip", agentData.IP);
+                        cmd.Parameters.Add(":agent_country", agentData.CountryCode);
+                        cmd.Parameters.Add(":country_name", agentData.CountryName);
+                        cmd.Parameters.Add(":agent_viewer", agentData.Viewer);
+                        cmd.Parameters.Add(":agent_grid", agentData.Grid);
+                        cmd.Parameters.Add(":agent_time", Util.UnixTimeSinceEpoch().ToString());
+
+                        cmd.ExecuteNonQuery();
+
+                        cmd.CommandText = "REPLACE INTO userlog_country (country_code, country_name) " +
+                            "VALUES (" +
+                            ":agent_country, :country_name)";
+
+                        cmd.ExecuteNonQuery();
+
+                        cmd.CommandText = "REPLACE INTO userlog_region (region_id, region_name) " +
+                            "VALUES (" +
+                            ":region_id, :region_name)";
+
+                        cmd.ExecuteNonQuery();
+
+                        cmd.CommandText = "REPLACE INTO userlog_viewer (viewer) " +
+                             "VALUES (" +
+                             ":agent_viewer)";
+
+                        cmd.ExecuteNonQuery();
+                        cmd.Parameters.Clear();
+                    }
+                }
+            }
+        }
     }
 }
