@@ -46,9 +46,6 @@ namespace OpenSim.Region.UserLogModule.Data
 
         private string m_connectionString = String.Empty;
 
-        private MySqlConnection m_connection = null;
-        private object m_dbLock = new object();
-
         protected virtual Assembly Assembly
         {
             get { return GetType().Assembly; }
@@ -62,19 +59,24 @@ namespace OpenSim.Region.UserLogModule.Data
         public void Initialise(string connectionString)
         {
             m_connectionString = connectionString;
-            m_log.InfoFormat("[UserLogModule]: MySql - connecting: {0}", m_connectionString);
+
+            m_log.DebugFormat("[UserLogModule]: MySql - connecting: {0}", m_connectionString);
 
             try
             {
-                m_connection = new MySqlConnection(m_connectionString);
-                m_connection.Open();
+                using (MySqlConnection connection = new MySqlConnection(m_connectionString))
+                {
+                    connection.Open();
 
-                Migration m = new Migration(m_connection, Assembly, "mysql");
-                m.Update();
+                    Migration m = new Migration(connection, Assembly, "mysql");
+                    m.Update();
+
+                    connection.Close();
+                }
             }
             catch (Exception ex)
             {
-                m_log.ErrorFormat("[UserLogModule]: Initial mysql exception for URI '{0}', Exception: {1}", m_connectionString, ex.Message);
+                m_log.ErrorFormat("[UserLogModule]: Initial mysql exception for URI '{0}', Exception: {1}", m_connectionString, ex);
                 Environment.Exit(-1);
             }
         }
@@ -87,7 +89,7 @@ namespace OpenSim.Region.UserLogModule.Data
             }
             catch (Exception ex)
             {
-                m_log.ErrorFormat("[UserLogModule]: MySQL Exception: {0} - {1}" + ex.Message, ex.StackTrace);
+                m_log.ErrorFormat("[UserLogModule]: MySQL Exception: {0}", ex);
             }
 
         }
@@ -99,13 +101,13 @@ namespace OpenSim.Region.UserLogModule.Data
 
         private void UpdateAgentTable(UserLogAgentData agentData)
         {
-            lock (m_dbLock)
+            lock (this)
             {
-                using (MySqlConnection dbcon = new MySqlConnection(m_connectionString))
+                using (MySqlConnection connection = new MySqlConnection(m_connectionString))
                 {
-                    dbcon.Open();
+                    connection.Open();
 
-                    using (MySqlCommand cmd = dbcon.CreateCommand())
+                    using (MySqlCommand cmd = connection.CreateCommand())
                     {
                         cmd.CommandText = "REPLACE INTO userlog_agent (region_id, agent_id, agent_name, " +
                             "agent_pos, agent_ip, agent_country, agent_viewer,agent_grid, agent_time) " +
