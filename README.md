@@ -17,7 +17,7 @@
 *
 ;
 
-changes from old Repo : https://github.com/PixelTomsen/opensim-dev-external/tree/master/opensim/addon-modules/OpenSimUserLog
+changes from old Repo : https://github.com/PixelTomsen/opensim-dev-external/tree/master/opensim/addon-modules/OpenSimUserLog (deleted)
 
 - add AgentIP2Country logging
 - preparing for different Storages
@@ -44,15 +44,16 @@ ToDo :
  ;;
  ;; current only web, mysql and sqlite storage implemented
  ;;
- 
- DataBase = web
- ConnectionString = "http://localhost/log/agentlog.php"
+
+
+ DataBase = sqlite
+ ConnectionString = "URI=file:UserLog.db,version=3,UseUTF16Encoding=True"
+
+ ;DataBase = web
+ ;ConnectionString = "http://localhost/log/agentlog.php"
 
  ;DataBase = mysql
  ;ConnectionString = "Data Source=localhost;Database=userlog;User ID=opensim;Password=***;"
 
  ;DataBase = mssql
  ;ConnectionString = "Server=localhost\SQLEXPRESS;Database=userlog;User Id=opensim; password=***;"
-
- ;DataBase = sqlite
- ;ConnectionString = "URI=file:UserLog.db,version=3,UseUTF16Encoding=True"
